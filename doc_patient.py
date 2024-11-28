@@ -5,7 +5,7 @@ Doctor_Patient_Conversation_Analysis
 
 import streamlit as st
 import openai
-import Groq
+import groq
 
 # Function to analyze transcription using GPT-4
 def analyze_transcription(transcription):
