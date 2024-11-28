@@ -9,7 +9,7 @@ Original file is located at
 
 # -*- coding: utf-8 -*-
 """Doctor_Patient_Conversation_TextInput"""
-
+import openai
 import streamlit as st
 from groq import Groq
 
