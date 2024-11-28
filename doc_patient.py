@@ -4,11 +4,12 @@ Doctor_Patient_Conversation_Analysis
 """
 
 import streamlit as st
-import openai
+import openai  # For GPT-4 (OpenAI API)
+# Assuming you have access to Groq's SDK for running models (you would need to import Groq SDK in a different context)
 import groq
 
 # Function to analyze transcription using GPT-4
-def analyze_transcription(transcription):
+def analyze_transcription_gpt4(transcription):
     """
     Sends the transcription to GPT-4 for medical analysis.
     Args:
@@ -28,18 +29,18 @@ def analyze_transcription(transcription):
     print("Sending transcription to GPT-4 for analysis...")
 
     try:
-        # Updated code to use the new OpenAI client interface
-        client = Groq(
-        api_key= st.secrets["API_KEY"]
+        # Ensure OpenAI API key is set in Streamlit secrets
+        openai.api_key = st.secrets["API_KEY"]
+
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a medical assistant AI with expertise in prognosis, diagnosis, and medication recommendations."},
+                {"role": "user", "content": prompt}
+            ]
         )
-        response = client.chat.completions.create(
-        model="llama3-8b-8192",
-        messages=[
-            {"role": "system", "content": "You are a medical assistant AI with expertise in prognosis, diagnosis, and medication recommendations."},
-            {"role": "user", "content": prompt}
-        ]
-        )
-        analysis = response['choices'][0]['message']['content']
+        # Correctly access the content
+        analysis = response.choices[0].message.content
         print("GPT-4 analysis received.")
         return analysis
     except Exception as e:
@@ -61,9 +62,9 @@ conversation = st.text_area(
 # Analyze button
 if st.button("Analyze Conversation"):
     if conversation.strip():
-        # Step 1: Analyze the conversation
+        # Step 1: Analyze the conversation with GPT-4
         with st.spinner("Analyzing the conversation..."):
-            analysis = analyze_transcription(conversation)
+            analysis = analyze_transcription_gpt4(conversation)
 
         # Step 2: Display the medical analysis
         st.subheader("Medical Analysis")
