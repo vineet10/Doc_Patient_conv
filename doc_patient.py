@@ -5,6 +5,7 @@ Doctor_Patient_Conversation_Analysis
 
 import streamlit as st
 import openai
+import groq
 
 # Function to analyze transcription using GPT-4
 def analyze_transcription(transcription):
@@ -27,18 +28,18 @@ def analyze_transcription(transcription):
     print("Sending transcription to GPT-4 for analysis...")
 
     try:
-        # Ensure OpenAI API key is set in Streamlit secrets
-        openai.api_key = st.secrets["API_KEY"]
-
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a medical assistant AI with expertise in prognosis, diagnosis, and medication recommendations."},
-                {"role": "user", "content": prompt}
-            ]
+        # Updated code to use the new OpenAI client interface
+        client = Groq(
+        api_key= st.secrets["API_KEY"]
         )
-        # Correctly access the content
-        analysis = response.choices[0].message.content
+        response = client.chat.completions.create(
+        model="llama3-8b-8192",
+        messages=[
+            {"role": "system", "content": "You are a medical assistant AI with expertise in prognosis, diagnosis, and medication recommendations."},
+            {"role": "user", "content": prompt}
+        ]
+        )
+        analysis = response['choices'][0]['message']['content']
         print("GPT-4 analysis received.")
         return analysis
     except Exception as e:
