@@ -29,18 +29,25 @@ def analyze_transcription_gpt4(transcription):
     print("Sending transcription to GPT-4 for analysis...")
 
     try:
-        # Updated code to use the new OpenAI client interface
-        client = Groq(
-        api_key= st.secrets["API_KEY"]
-        )
+        # Initialize Groq client (ensure your API_KEY is correctly set in Streamlit secrets)
+        client = Groq(api_key=st.secrets["API_KEY"])
+        
+        # Create a completion request to the GPT model
         response = client.chat.completions.create(
-        model="llama3-8b-8192",
-        messages=[
-            {"role": "system", "content": "You are a medical assistant AI with expertise in prognosis, diagnosis, and medication recommendations."},
-            {"role": "user", "content": prompt}
-        ]
+            model="llama3-8b-8192",  # Ensure this model is available via Groq
+            messages=[
+                {"role": "system", "content": "You are a medical assistant AI with expertise in prognosis, diagnosis, and medication recommendations."},
+                {"role": "user", "content": prompt}
+            ]
         )
+
+        # Assuming response is a complex object, extract the content
+        # Make sure to print the full response to check the structure
+        print(response)
+        
+        # Adjusting for possible response structure, access the 'choices' attribute and extract message content
         analysis = response['choices'][0]['message']['content']
+        
         print("GPT-4 analysis received.")
         return analysis
     except Exception as e:
