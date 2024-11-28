@@ -6,7 +6,7 @@ Doctor_Patient_Conversation_Analysis
 import streamlit as st
 import openai  # For GPT-4 (OpenAI API)
 # Assuming you have access to Groq's SDK for running models (you would need to import Groq SDK in a different context)
-import groq
+from groq import Groq
 
 # Function to analyze transcription using GPT-4
 def analyze_transcription_gpt4(transcription):
